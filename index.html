@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fancy Address Card</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  * {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
+    color: #333;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    padding: 35px;
+    width: 360px;
+    position: relative;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 45px rgba(0,0,0,0.2);
+}
+
+.header {
+    text-align: center;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+.avatar {
+    width: 90px;
+    height: 90px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 36px;
+    font-weight: bold;
+    margin: 0 auto 15px;
+    box-shadow: 0 8px 20px rgba(118, 75, 162, 0.4);
+}
+
+.name {
+    margin: 0;
+    font-size: 24px;
+    color: #2c3e50;
+}
+
+.title {
+    color: #7f8c8d;
+    font-size: 14px;
+    margin-top: 5px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    color: #444;
+}
+
+.icon-box {
+    width: 35px;
+    height: 35px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+    color: white;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+    .bg-phone { background-color: #27ae60; }
+    .bg-viber { background-color: #7360f2; }
+    .bg-telegram { background-color: #0088cc; }
+    .bg-gmail { background-color: #ea4335; }
+    .bg-address { background-color: #f39c12; }
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn-services {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3);
+}
+
+.btn-services:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.btn-copy {
+    background: #34495e;
+}
+
+.btn-copy:hover {
+    background: #2c3e50;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 1000;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    transform: scale(0.8);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #2c3e50;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #95a5a6;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-btn:hover {
+    color: #e74c3c;
+}
+
+.services-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.services-list li {
+    padding: 12px 0;
+    border-bottom: 1px dashed #eee;
+    display: flex;
+    align-items: center;
+}
+
+.services-list li:last-child {
+    border-bottom: none;
+}
+
+.services-list li i {
+    color: #27ae60;
+    margin-right: 10px;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+<div class="header">
+    <div class="avatar">AS</div>
+    <h1 class="name">Alex Smith</h1>
+    <div class="title">Freelance Tech Consultant</div>
+</div>
+
+<div class="contact-list" id="contactData">
+    <div class="contact-item">
+    <div class="icon-box bg-phone"><i class="fas fa-phone"></i></div>
+    <span class="detail-text">+95 9 123 456 789</span>
+    </div>
+    <div class="contact-item">
+    <div class="icon-box bg-viber"><i class="fab fa-viber"></i></div>
+    <span class="detail-text">+95 9 123 456 789</span>
+    </div>
+    <div class="contact-item">
+    <div class="icon-box bg-telegram"><i class="fab fa-telegram-plane"></i></div>
+    <span class="detail-text">@AlexSmithTech</span>
+    </div>
+    <div class="contact-item">
+    <div class="icon-box bg-gmail"><i class="fas fa-envelope"></i></div>
+    <span class="detail-text">alex.smith.tech@gmail.com</span>
+    </div>
+    <div class="contact-item" style="align-items: flex-start;">
+    <div class="icon-box bg-address"><i class="fas fa-map-marker-alt"></i></div>
+    <span class="detail-text" style="line-height: 1.4; margin-top: 7px;">
+        123 Innovation Avenue,<br>Tech District, Mandalay
+    </span>
+    </div>
+</div>
+
+<div class="button-group">
+    <button class="btn btn-copy" id="copyBtn" onclick="copyContactInfo()">Copy Info</button>
+    <button class="btn btn-services" onclick="toggleModal(true)">Available Services</button>
+</div>
+</div>
+
+<div class="modal-overlay" id="servicesModal" onclick="handleOutsideClick(event)">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h3>Available Services</h3>
+        <button class="close-btn" onclick="toggleModal(false)"><i class="fas fa-times"></i></button>
+    </div>
+    <ul class="services-list">
+        <li><i class="fas fa-check-circle"></i> Custom Web Development</li>
+        <li><i class="fas fa-check-circle"></i> Mobile App Design</li>
+        <li><i class="fas fa-check-circle"></i> Database Architecture</li>
+        <li><i class="fas fa-check-circle"></i> Tech Troubleshooting & Support</li>
+        <li><i class="fas fa-check-circle"></i> UI/UX Consultation</li>
+    </ul>
+    </div>
+</div>
+
+<script>
+const modal = document.getElementById('servicesModal');
+    function toggleModal(show) {
+    if (show) {
+    modal.classList.add('active');
+    } else {
+    modal.classList.remove('active');
+    }
+}
+
+function handleOutsideClick(event) {
+    if (event.target === modal) {
+    toggleModal(false);
+    }
+}
+
+function copyContactInfo() {
+    const copyBtn = document.getElementById('copyBtn');
+    
+    const textToCopy = `
+        Name: Alex Smith
+        Title: Freelance Tech Consultant
+        Phone: +95 9 123 456 789
+        Viber: +95 9 123 456 789
+        Telegram: @AlexSmithTech
+        Email: alex.smith.tech@gmail.com
+        Address: 123 Innovation Avenue, Tech District, Mandalay
+    `;
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        const originalText = copyBtn.innerText;
+        copyBtn.innerText = 'Copied!';
+        copyBtn.style.background = '#27ae60';
+        setTimeout(() => {
+            copyBtn.innerText = originalText;
+            copyBtn.style.background = '#34495e';
+        }, 2000);
+    }).catch(err => {
+        alert("Failed to copy. Please try again.");
+    });
+    }
+
+    
+    new QRCode(document.getElementById("qrcode"), window.location.href);
+
+</script>
+</body>
+</html>
